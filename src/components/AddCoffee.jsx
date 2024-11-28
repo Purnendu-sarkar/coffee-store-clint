@@ -1,8 +1,8 @@
 import React from "react";
+import Swal from "sweetalert2";
 
 const AddCoffee = () => {
-
-  const handleAddCoffee = e =>{
+  const handleAddCoffee = (e) => {
     e.preventDefault();
 
     const name = e.target.name.value;
@@ -13,9 +13,28 @@ const AddCoffee = () => {
     const details = e.target.details.value;
     const photo = e.target.photo.value;
 
-    const newCoffee = { name, chef, supplier, taste, category, details, photo }
-    console.log(newCoffee)
-  }
+    const newCoffee = { name, chef, supplier, taste, category, details, photo };
+    console.log(newCoffee);
+
+    //send data to the server
+    fetch("http://localhost:5000/coffee", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(newCoffee),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        Swal.fire({
+          title: 'success!',
+          text: 'Coffee added successfully',
+          icon: 'success',
+          confirmButtonText: 'Cool'
+        })
+      });
+  };
   return (
     <div className="lg:w-3/4 mx-auto">
       <div className="text-center p-10">
